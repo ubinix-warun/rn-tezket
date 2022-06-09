@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "rn-tezket",
+    "slug": "rn-tezket",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
