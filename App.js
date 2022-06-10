@@ -1,21 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// In App.js in a new project
 
-export default function App() {
+import * as React from 'react';
+
+import { NativeBaseProvider } from "native-base"
+
+import { BaseTheme } from './src/theme';
+import config from './nativebase.config';
+import { Root } from './src/components/RootComponent';
+
+import { DAppClient } from '@airgap/beacon-sdk';
+
+function App() {
+  
+    // Initiate DAppClient
+    const client = new DAppClient({
+      name: 'Tezket', // Name of the DApp,
+      disclaimerText: 'This is an optional <b>disclaimer</b>.'
+      // preferredNetwork: beacon.NetworkType.DELPHINET
+      // matrixNodes: ['test.papers.tech', 'test2.papers.tech', 'matrix.papers.tech']
+      // matrixNodes: ['beacon-node-0.papers.tech:8448']
+      // matrixNodes: ['matrix.papers.tech']
+      // matrixNodes: ['beacon.tztip.me']
+    })
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeBaseProvider 
+      theme={BaseTheme}
+      config={config}
+    >
+      <Root/>
+    </NativeBaseProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
