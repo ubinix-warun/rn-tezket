@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {
   Box,
@@ -9,21 +9,32 @@ import {
   List,
   Switch,
   Text,
+  Image,
   Button,
   useColorMode,
+  AspectRatio,
   ColorMode,
 } from 'native-base';
 import {StyleSheet, View} from 'react-native';
 import { MaterialCommunityIcons, Entypo, Ionicons } from '@expo/vector-icons';
 
+import { TicketNft, WalletContext } from '../providers/WalletContext';
 
 type Props = {
   onPress: () => any;
+  ticketNft: TicketNft;
   // userAddress: string;
-  // colorMode: ColorMode;
 };
 
-const TicketModalContent: React.FC<Props> = props => (
+const TicketModalContent: React.FC<Props> =  (props) => {
+
+  const { colorMode } = useColorMode();
+
+  useEffect(() => {
+    console.log(props);
+  }, [])
+
+    return (
   <Box style={styles.content} pt={5} _dark={{
     borderColor: "coolGray.600",
     backgroundColor: "gray.800"
@@ -34,26 +45,28 @@ const TicketModalContent: React.FC<Props> = props => (
     backgroundColor: "gray.50"
   }}>
     <Heading p={3} mx={2}>
-    Ticket ID: 10000
+    Ticket ID: {String(props.ticketNft.tokenId).padStart(20, '0')}
     </Heading>
     {/* <Text style={styles.contentTitle}>Hi {props.userAddress} 👋!</Text> */}
-    <HStack alignItems="center" space={6} py={4} px={3} mx={2}>
+    {/* <HStack alignItems="center" space={6} py={4} px={3} mx={2}>
     <Ionicons
       name="wallet"
       size={24}
-      // color={props.colorMode == 'dark' ? 'white' : 'black'}
-    />
+      color={colorMode == 'dark' ? 'white' : 'black'}
+    /> */}
     {/* <Text fontSize="sm">{props.userAddress}</Text> */}
+    {/* </HStack> */}
+    <HStack style={styles.qrContent} >
+      {/* <AspectRatio w="100%" ratio={16 / 9}> */}
+        <Image source={props.ticketNft.displayNft} style={{width: 330, height: 440, resizeMode: 'contain'}} ></Image>
+      {/* </AspectRatio> */}
     </HStack>
-    {/* <HStack style={styles.qrContent}  space={6} py={4} px={3} mx={2}>
-    <QRCode value={props.userAddress} />
-    </HStack> */}
     <HStack alignItems="center" space={6} py={4} px={3} mx={2}>
     <Button testID={'close-button'} onPress={props.onPress}>Close</Button>
     </HStack>
   </Box>
-);
-
+  )
+};
 const styles = StyleSheet.create({
   content: {
     // backgroundColor: 'black',
@@ -69,7 +82,7 @@ const styles = StyleSheet.create({
   },
   qrContent: {
     alignItems: 'center',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
   }
 });
 

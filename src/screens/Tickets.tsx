@@ -26,11 +26,22 @@ import { WalletContext } from '../providers/WalletContext';
 import BuyTicketModalContent from '../modals/BuyTicketModalContent';
 import MintModalContent from '../modals/MintModalContent';
 
+export type TicketInfo = {
+  ticketype: string;  
+  name: string;
+  urlimg: String;
+  tag: string;
+  keyword: string;
+  description: string;
+  timepref: string;
+}
+
 export const TicketType = [
   "1234",
+  "1235",
 ];
 
-export const TicketList = [
+export const TicketList: TicketInfo[] = [
   {
     ticketype: TicketType[0],
     name: "The Garden City",
@@ -38,15 +49,16 @@ export const TicketList = [
     tag: "1 DAY PASS",
     keyword: "The Silicon Valley of India.",
     description: "Bengaluru (also called Bangalore) is the center of India's high-tech\nindustry. The city is also known for its parks and nightlife.",
-    timepref: "Vaild in 10/06/2022"
+    timepref: "Vaild in 27/06/2022"
   },
   // {
+  //   ticketype: TicketType[1],
   //   name: "The Garden City",
-  //   urlimg: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg",
-  //   tag: "PHOTOS",
+  //   urlimg: require('./card/Bangalore_citycover_20190613234056.jpg'),
+  //   tag: "3 DAY PASS",
   //   keyword: "The Silicon Valley of India.",
   //   description: "Bengaluru (also called Bangalore) is the center of India's high-tech\nindustry. The city is also known for its parks and nightlife.",
-  //   timepref: "6 mins ago"
+  //   timepref: "Vaild in 29/06/2022"
   // },
 ];
 
@@ -59,6 +71,9 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
   const [isMintModalVisible, setMintModalVisible] = useState(false);
 
   const [payStatus, setPayStatus] = useState(false);
+  const [mintStatus, setMintStatus] = useState(false);
+
+  const [ticketType, setTicketType] = useState("");
 
   const toggleBuyTicketModal = () => {
     setBuyTicketModalVisible(!isBuyTicketModalVisible);
@@ -70,12 +85,9 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
     setBuyTicketModalVisible(false);
   };
 
-  const showBuyTicket = async () => {
-
+  const showBuyTicket = async (tickettype) => {
+    setTicketType(tickettype);
     setBuyTicketModalVisible(true);
-    // console.log("BUY");
-    // console.log("ShowBuyTicket! >> " + userAddress);
-
   };
 
   return (
@@ -91,7 +103,10 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
         </Modal>
         
         <Modal testID={'modal'} isVisible={isMintModalVisible}>
-          <MintModalContent onPress={toggleMintModal} statusModel={payStatus} txID={''}/>
+          <MintModalContent onPress={toggleMintModal} 
+              payStatus={payStatus} 
+              mintStatus={mintStatus} setMintStatus={setMintStatus}
+              userAddress={userAddress} ticketType={ticketType} txID={''}/>
         </Modal>
 
         <Divider opacity={colorMode == 'dark' ? '0.4' : '1'} />
@@ -149,7 +164,7 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
                   </Text>
                 </HStack>
               <Button ml="auto"
-                onPress={showBuyTicket}
+                onPress={()=>showBuyTicket(ticket.ticketype)}
                 >Buy</Button>
               </HStack>
             </Stack>

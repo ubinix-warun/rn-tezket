@@ -17,28 +17,88 @@ import {
 import {StyleSheet, View} from 'react-native';
 import { MaterialCommunityIcons, Entypo, Ionicons } from '@expo/vector-icons';
 
+import axios from 'axios';
+
+import { WalletContext } from '../providers/WalletContext';
+
 type Props = {
   onPress: () => any;
-  statusModel: Boolean;
+  payStatus: Boolean;
+  mintStatus: Boolean;
+  setMintStatus: (Boolean) => any;
+  userAddress: string;
+  ticketType: string;
   txID: string;
 };
 
     
 const MintModalContent: React.FC<Props> = (props) => {
 
+    const { getTicketNfts } =useContext(WalletContext);
+
+    const [isMintSuccess, setIsMintSuccess] = useState(false);
+    const [isMintFail, setIsMintFail] = useState(false);
+
     useEffect(() => {
     
         const mint = async () => {
             
+          console.log("Mint!");
+      
+          try {
+
+            const req = { 
+              minterAddress: props.userAddress,
+              ticketType: props.ticketType,
+              payRef: props.txID,
+              signRef: "<>"
+            };
+        
+            console.log(req);
+
+            const resp = await axios.post(
+                  `https://df7f4af32cef.ap.ngrok.io/mint`,
+                  req
+                );
+                
+            if(resp.data.status) {
+              props.setMintStatus(true);
+              setIsMintSuccess(true);
+              getTicketNfts(props.userAddress);
+              
+            } else {
+              setIsMintFail(true);
+            }
+
+            // console.log(resp.data);
+
+          } catch (err) {
+              // Handle Error Here
+              console.error(err);
+              setIsMintFail(true);
+          }
 
         }
 
-        // // call the function
-        // mint()
-        //   // make sure to catch any error
-        //   .catch(console.error);
+        // call the function
+        mint()
+          // make sure to catch any error
+          .catch(console.error);
           
     }, [])
+
+
+    // const MintResult=(props)=>{
+      
+    //   return(
+    //     <HStack alignItems="center" space={6} py={4} px={3} mx={2}>
+    //       {props.mintStatus 
+    //       ?<Image source={require('./symbol/green-check.png')} style={{ width: 120, height: 120 }}/>
+    //       :<Image source={require('./symbol/red-error.png')} style={{ width: 120, height: 120 }}/>
+    //       }
+    //     </HStack>
+    //   )
+    // }
 
 
     return (
@@ -54,13 +114,15 @@ const MintModalContent: React.FC<Props> = (props) => {
     <Heading p={3} mx={2}>
     Mint ...
     </Heading>
-    
-    <HStack alignItems="center" space={6} py={4} px={3} mx={2}>
-      {props.statusModel 
-      ?<Image source={require('./symbol/green-check.png')} style={{ width: 120, height: 120 }}/>
-      :<Image source={require('./symbol/red-error.png')} style={{ width: 120, height: 120 }}/>
-      }
-    </HStack>
+
+    {isMintSuccess 
+    ?<Image source={require('./symbol/green-check.png')} style={{ width: 120, height: 120 }}/>
+    :<></>
+    }
+    {isMintFail
+    ?<Image source={require('./symbol/red-error.png')} style={{ width: 120, height: 120 }}/>
+    :<></>
+    }
 
     <HStack alignItems="center" space={6} py={4} px={3} mx={2}>
     <Button testID={'close-button'} onPress={props.onPress}>Close</Button>

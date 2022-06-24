@@ -91,6 +91,7 @@ function displayPaymentResults(status, props) {
         props.setResultStatus(false);
     }
 
+    props.setResultStatus(true); // TEST
     props.onPress();
 
     // statusContainer.style.visibility = 'visible';

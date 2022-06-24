@@ -53,15 +53,18 @@ export function Reserve({ navigation }: { navigation: BottomTabNavigationProp<an
   const { isWalletLinked, userAddress, userTicketNfts,getTicketNfts } =useContext(WalletContext);
   const [isTicketModalVisible, setTicketModalVisible] = useState(false);
 
+  const [selectNft, setSelectNft] = useState(undefined);
+
   const toggleTicketModal = () => {
     setTicketModalVisible(!isTicketModalVisible);
   };
 
+  // let selectNft: TicketNft;
   const showTicket = async (nft:TicketNft) => {
 
+    setSelectNft(nft);
+    
     setTicketModalVisible(true);
-
-    console.log(nft)
 
   };
 
@@ -73,7 +76,7 @@ export function Reserve({ navigation }: { navigation: BottomTabNavigationProp<an
         </Heading>
 
         <Modal testID={'modal'} isVisible={isTicketModalVisible}>
-          <TicketModalContent onPress={toggleTicketModal} />
+          <TicketModalContent onPress={toggleTicketModal} ticketNft={selectNft} />
         </Modal>
 
         <Divider opacity={colorMode == 'dark' ? '0.4' : '1'} />
@@ -112,9 +115,8 @@ export function Reserve({ navigation }: { navigation: BottomTabNavigationProp<an
 
         {userTicketNfts.map((nft) => (
 
-
-          <Pressable onPress={() => showTicket(nft) }>
-        <Box alignItems="center" mx={3} > 
+        <Pressable onPress={() => showTicket(nft) }>
+        <Box alignItems="center" mx={3} my={3}> 
           <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
             borderColor: "coolGray.600",
             backgroundColor: "gray.700"
@@ -126,25 +128,25 @@ export function Reserve({ navigation }: { navigation: BottomTabNavigationProp<an
           }}>
             <Box>
               <AspectRatio w="100%" ratio={16 / 9}>
-                {/* <Image source={
-                  nft.schedule.urlimg
-              } alt="image" /> */}
+                <Image source={
+                  nft.reservation.urlimg
+              } alt="image" />
               </AspectRatio>
-              {/* <Center bg="violet.500" _dark={{
+              <Center bg="violet.500" _dark={{
                   bg: "violet.400"
                 }} _text={{
                   color: "warmGray.50",
                   fontWeight: "700",
                   fontSize: "xs"
                 }} position="absolute" bottom="0" px="3" py="1.5">
-                {nft.schedule.tag}
-              </Center> */}
+                {nft.reservation.tag}
+              </Center>
             </Box>
             <Stack minW="290" p="4" space={3}>
               <Stack space={2}>
-                {/* <Heading size="md" ml="-1">
-                  {nft.schedule.name}
-                </Heading> */}
+                <Heading size="md" ml="-1">
+                  {nft.reservation.name}
+                </Heading>
                 {/* <Text fontSize="xs" _light={{
                   color: "violet.500"
                 }} _dark={{
@@ -158,11 +160,11 @@ export function Reserve({ navigation }: { navigation: BottomTabNavigationProp<an
               </Text> */}
               <HStack alignItems="center" space={4} justifyContent="space-between">
                 <HStack alignItems="center">
-                  {/* <Text color="coolGray.600" _dark={{
+                  <Text color="coolGray.600" _dark={{
                       color: "warmGray.200"
                     }} fontWeight="400">
-                    {nft.schedule.timepref}
-                  </Text> */}
+                    {nft.reservation.timepref}
+                  </Text>
                 </HStack>
               {/* <Button ml="auto"
                 onPress={() => console.log("BUY")}
@@ -184,71 +186,6 @@ export function Reserve({ navigation }: { navigation: BottomTabNavigationProp<an
         </Link>
         ))
         } */}
-
-        {TicketList.map((schedule) => (
-        
-        <Pressable onPress={() => showTicket(schedule) }>
-        <Box alignItems="center" mx={3} > 
-          <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
-            borderColor: "coolGray.600",
-            backgroundColor: "gray.700"
-          }} _web={{
-            shadow: 2,
-            borderWidth: 0
-          }} _light={{
-            backgroundColor: "gray.50"
-          }}>
-            <Box>
-              <AspectRatio w="100%" ratio={16 / 9}>
-                <Image source={
-                  schedule.urlimg
-              } alt="image" />
-              </AspectRatio>
-              <Center bg="violet.500" _dark={{
-                  bg: "violet.400"
-                }} _text={{
-                  color: "warmGray.50",
-                  fontWeight: "700",
-                  fontSize: "xs"
-                }} position="absolute" bottom="0" px="3" py="1.5">
-                {schedule.tag}
-              </Center>
-            </Box>
-            <Stack minW="290" p="4" space={3}>
-              <Stack space={2}>
-                <Heading size="md" ml="-1">
-                  {schedule.name}
-                </Heading>
-                <Text fontSize="xs" _light={{
-                  color: "violet.500"
-                }} _dark={{
-                  color: "violet.400"
-                }} fontWeight="500" ml="-0.5" mt="-1">
-                  {schedule.keyword}
-                </Text>
-              </Stack>
-              {/* <Text fontWeight="400">
-                {schedule.description}
-              </Text> */}
-              <HStack alignItems="center" space={4} justifyContent="space-between">
-                <HStack alignItems="center">
-                  <Text color="coolGray.600" _dark={{
-                      color: "warmGray.200"
-                    }} fontWeight="400">
-                    {schedule.timepref}
-                  </Text>
-                </HStack>
-              {/* <Button ml="auto"
-                onPress={() => console.log("BUY")}
-                >Buy</Button> */}
-              </HStack>
-            </Stack>
-          </Box>
-        </Box>
-        </Pressable>
-
-        ))}
-
 
       </ScrollView>
     </Box>

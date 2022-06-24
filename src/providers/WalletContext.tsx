@@ -9,7 +9,7 @@ const { TezosToolkit, MichelsonMap } = require('@taquito/taquito');
 import { char2Bytes, bytes2Char } from "@taquito/utils";
 
 
-import { TicketType, TicketList } from '../screens/Tickets';
+import { TicketType, TicketList, TicketInfo } from '../screens/Tickets';
 
 const rpcUrl = 'https://ithacanet.ecadinfra.com';
 const networkId = NetworkType.ITHACANET;
@@ -48,7 +48,7 @@ export type TicketNft = {
     displayNft: string;
     ipfsHash: string;
     tokenMetadata: any;
-    schdule: any;
+    reservation: TicketInfo;
 }
 
 export type WalletContextState = {
@@ -110,32 +110,29 @@ const WalletProvider: FC = ({ children }) => {
 
                   // TICKETTYPE
                   const displayUri = metadataNft.displayUri;
+                  const tokenSymbol = metadataNft.symbol;
 
+                  const ticketType = tokenSymbol.slice(0, 4) === "TZT-" ? tokenSymbol.slice(4) : null;
+                  const ticketListIdx = TicketType.indexOf(ticketType);
                   const ipfsDisplayHash = displayUri.slice(0, 7) === "ipfs://" ? displayUri.slice(7) : null;
-                  const schduleInfo = {
-                    ticketype: TicketType[0],
-                    name: "The Garden City",
-                    urlimg: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg",
-                    tag: "1 DAY PASS",
-                    keyword: "The Silicon Valley of India.",
-                    description: "Bengaluru (also called Bangalore) is the center of India's high-tech\nindustry. The city is also known for its parks and nightlife.",
-                    timepref: "Vaild in 10/06/2022"
-                  };
+
+                  const ticketInfo: TicketInfo = TicketList[ticketListIdx];
 
                   let ticketNft: TicketNft = {
                     tokenId: tokenId,
                     displayNft: `${ipfsUrl}/ipfs/${ipfsDisplayHash}`,
                     ipfsHash: ipfsHash,
                     tokenMetadata: metadataNft,
-                    schdule: schduleInfo
+                    reservation: ticketInfo
                   };
-
-                  console.log(ticketNft);
 
                   return ticketNft;
                 })
               ]);
-            setUserTicketNfts(userTicketNfts);
+
+            setUserTicketNfts(userTicketNfts.filter((element) => { 
+                return element.reservation !== undefined; // SKIP unknown TicketType
+            }));
         }
         // console.log(getTokenIds);
 

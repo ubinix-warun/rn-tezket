@@ -150,7 +150,7 @@ export function Profile({ navigation }: { navigation: BottomTabNavigationProp<an
             color={colorMode == 'dark' ? 'white' : 'black'}
           />
           <Text>Version</Text>
-          <Text ml="auto">1.2   </Text>
+          <Text ml="auto">1.5   </Text>
         </HStack>
         {/* <Divider opacity={colorMode == 'dark' ? '0.4' : '1'} /> */}
 
