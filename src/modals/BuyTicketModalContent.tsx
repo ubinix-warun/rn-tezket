@@ -20,8 +20,8 @@ import { payments } from '@square/web-sdk';
 import type { Payments, GooglePay } from '@square/web-sdk';
 
 const paymentUrl = 'http://localhost:3000'
-const appId = 'sandbox-sq0idb-b1eZNEs9O1IsjMfcNnAqwA';
-const locationId = 'L5Q4850H0MMMZ';
+const appId = '<>';
+const locationId = '<>';
 
 type Props = {
   onPress: () => any;
