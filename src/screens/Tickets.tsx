@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 import {
@@ -18,12 +18,23 @@ import {
   useColorMode,
 } from 'native-base';
 import { ScrollView } from 'react-native';
+import { MaterialCommunityIcons, Entypo, Ionicons } from '@expo/vector-icons';
 
+import Modal from "react-native-modal";
 
-const ticketList = [
+import { WalletContext } from '../providers/WalletContext';
+import BuyTicketModalContent from '../modals/BuyTicketModalContent';
+import MintModalContent from '../modals/MintModalContent';
+
+export const TicketType = [
+  "1234",
+];
+
+export const TicketList = [
   {
+    ticketype: TicketType[0],
     name: "The Garden City",
-    urlimg: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg",
+    urlimg: require('./card/Bangalore_citycover_20190613234056.jpg'),
     tag: "1 DAY PASS",
     keyword: "The Silicon Valley of India.",
     description: "Bengaluru (also called Bangalore) is the center of India's high-tech\nindustry. The city is also known for its parks and nightlife.",
@@ -42,7 +53,31 @@ const ticketList = [
 export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<any> }) {
 
   const { colorMode, toggleColorMode } = useColorMode();
-  
+
+  const { isWalletLinked, userAddress } =useContext(WalletContext);
+  const [isBuyTicketModalVisible, setBuyTicketModalVisible] = useState(false);
+  const [isMintModalVisible, setMintModalVisible] = useState(false);
+
+  const [payStatus, setPayStatus] = useState(false);
+
+  const toggleBuyTicketModal = () => {
+    setBuyTicketModalVisible(!isBuyTicketModalVisible);
+    toggleMintModal();
+  };
+
+  const toggleMintModal = () => {
+    setMintModalVisible(!isMintModalVisible);
+    setBuyTicketModalVisible(false);
+  };
+
+  const showBuyTicket = async () => {
+
+    setBuyTicketModalVisible(true);
+    // console.log("BUY");
+    // console.log("ShowBuyTicket! >> " + userAddress);
+
+  };
+
   return (
     <Box  pt={8}>
         <ScrollView contentContainerStyle={{ width: '100%', flexGrow: 1 }}>
@@ -50,9 +85,18 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
           Tickets
         </Heading>
 
+        <Modal testID={'modal'} isVisible={isBuyTicketModalVisible}>
+          <BuyTicketModalContent onPress={toggleBuyTicketModal} 
+              resultStatus={payStatus} setResultStatus={setPayStatus}/>
+        </Modal>
+        
+        <Modal testID={'modal'} isVisible={isMintModalVisible}>
+          <MintModalContent onPress={toggleMintModal} statusModel={payStatus} txID={''}/>
+        </Modal>
+
         <Divider opacity={colorMode == 'dark' ? '0.4' : '1'} />
 
-        {ticketList.map((ticket) => (
+        {TicketList.map((ticket) => (
         
         <Box alignItems="center" mx={3} my={3}> 
           <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
@@ -66,9 +110,9 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
           }}>
             <Box>
               <AspectRatio w="100%" ratio={16 / 9}>
-                <Image source={{
-                uri: ticket.urlimg
-              }} alt="image" />
+                <Image source={
+                ticket.urlimg
+              } alt="image" />
               </AspectRatio>
               <Center bg="violet.500" _dark={{
                   bg: "violet.400"
@@ -105,7 +149,7 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
                   </Text>
                 </HStack>
               <Button ml="auto"
-                onPress={() => console.log("BUY")}
+                onPress={showBuyTicket}
                 >Buy</Button>
               </HStack>
             </Stack>
@@ -118,3 +162,14 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
     </Box>
   );
 }
+
+// https://cloudflare-ipfs.com/ipfs/QmWACw3fWq8EbGSdgsBZMxw4cwjedonoSUtaKesZC1QgvH
+
+// {
+//   "minterAddress": "tz1i4W46rLC4qNHn2jcZmgUo6FQ1AEomhzjh",
+//   "status": true,
+//   "ipfs": {
+//       "imageHash": "QmUm87xMH8b5XkeD1Xo54ZzQao62K83F3NmmLFV1JSgiKZ",
+//       "metadataHash": "QmWACw3fWq8EbGSdgsBZMxw4cwjedonoSUtaKesZC1QgvH"
+//   }
+// }

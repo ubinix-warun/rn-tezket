@@ -17,22 +17,22 @@ import {
 import Mcicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Home, Schedule, Tickets, Profile } from '../screens';
+import { Home, Reserve, Tickets, Profile } from '../screens';
 
 const Tab = createBottomTabNavigator();
 
 // const tabDefault = "Home"
-const tabDefault = "Schedule"
+// const tabDefault = "Reserve"
 // const tabDefault = "Tickets"
-// const tabDefault = "Profile"
+const tabDefault = "Profile"
 const tabscreens = [
   // {
   //   name: "Home",
   //   component: Home
   // },
   {
-    name: "Schedule",
-    component: Schedule
+    name: "Reserve",
+    component: Reserve
   },
   {
     name: "Tickets",
@@ -59,7 +59,7 @@ export function RootTab() {
                 iconName = focused
                   ? 'home'
                   : 'home-outline';
-              } else if (route.name === 'Schedule') {
+              } else if (route.name === 'Reserve') {
                 iconName = focused 
                 ? 'calendar'
                 : 'calendar-outline';

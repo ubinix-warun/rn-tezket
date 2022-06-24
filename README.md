@@ -49,9 +49,14 @@ react-native-screens
 react-native-vector-icons
 
 yarn add events stream
-yarn add @airgap/beacon-sdk @taquito/taquito @taquito/beacon-wallet
+yarn add @airgap/beacon-sdk @taquito/taquito @taquito/beacon-wallet @square/web-sdk
 
-yarn add --dev typescript@~4.3.5 @types/react@~17.0.21 @types/react-native@~0.67.6
+yarn add --dev typescript@~4.3.5 @types/react@~17.0.21 @types/react-native@~0.67.6 @square/web-sdk
+yarn add --dev react-native-modal react-qr-code react-qr-reader
 
+// npm install --save react-square-web-payments-sdk
+// react-qr-image
+
+./ngrok http 19006 // FOR GPAY TEST & CAM
 
 ```

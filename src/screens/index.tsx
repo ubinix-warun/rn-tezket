@@ -1,4 +1,4 @@
 export * from './Home';
-export * from './Schedule';
+export * from './Reserve';
 export * from './Tickets';
 export * from './Profile';
