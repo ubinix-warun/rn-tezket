@@ -17,7 +17,7 @@ const appId = 'sandbox-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
 const locationId = 'XXXXXXXXXXXXXX';
 
 ```
-* Edit API Minter on src/modals/MintModalContext.tsx.
+* Edit API Minter on src/modals/MintModalContext.tsx. [nft-tezket](https://github.com/ubinix-warun/nft-tezket)
 ```
 const apiminter = 'https://xxx.xxx.xxx.xxx';
 
