@@ -1,6 +1,6 @@
 # RN-Tezket
 
-Tezket -- "Tezos Ticket" React Native app -- Buy NFT ticket and use QR to control admittance at the gate., [MIT LICENSE](https://github.com/ubinix-warun/react-algomask/blob/master/LICENSE)
+Tezket -- "Tezos Ticket" React Native app -- Buy NFT ticket and use QR to control admittance at the gate., [MIT LICENSE](https://github.com/ubinix-warun/rn-tezket/blob/master/LICENSE)
 
 # Screenshot (Prototype V1)
 
@@ -20,6 +20,12 @@ const locationId = 'XXXXXXXXXXXXXX';
 * Edit API Minter on src/modals/MintModalContext.tsx.
 ```
 const apiminter = 'https://xxx.xxx.xxx.xxx';
+
+```
+* Edit NFTS_Contract Addr on src/providers/WalletContext.tsx
+```
+const Tezos = new TezosToolkit(rpcUrl);
+const nftContract = '<PKH>';
 
 ```
 * Run rn-tezket via Expo
