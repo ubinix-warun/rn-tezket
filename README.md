@@ -1,62 +1,39 @@
+# RN-Tezket
 
+Tezket -- "Tezos Ticket" React Native app -- Buy NFT ticket and use QR to control admittance at the gate., [MIT LICENSE](https://github.com/ubinix-warun/react-algomask/blob/master/LICENSE)
 
+# Screenshot (Prototype V1)
+
+![v1](https://user-images.githubusercontent.com/3756229/175616596-3a27e8f8-dd78-4431-a2d5-8fcc14f30617.png)
+
+## [Tezket -- NFT Ticketing System (Prototype V1)](https://www.figma.com/file/3a9etH2QxvpsQBcrfZHgX6/Tezket----NFT-Ticketing-System-(Prototype-V1)?node-id=0%3A1)
+
+# Build & Run
+
+* Edit Square AppID, LocationID and Api payment on src/modals/BuyTicketModalContext.tsx.
+```
+const paymentUrl = 'https://xxx.xxx.xxx.xxx'
+const appId = 'sandbox-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+const locationId = 'XXXXXXXXXXXXXX';
 
 ```
-
-yarn add react-native-sodium
-yarn remove libsodium-wrappers
-
-    // "libsodium-wrappers": "0.7.9"
-    // "@types/libsodium-wrappers": "0.7.9",
-
-
-  KeyPair,
-  CryptoKX,
-  crypto_sign_ed25519_sk_to_curve25519,
-  crypto_sign_ed25519_pk_to_curve25519,
-  crypto_kx_server_session_keys,
-  crypto_kx_client_session_keys
-  
-  ready,
-  crypto_secretbox_NONCEBYTES,
-  crypto_secretbox_MACBYTES
-
-  crypto_generichash
-
-  from_string,
-  crypto_sign_detached,
-
-  crypto_sign_seed_keypair,
-  randombytes_buf,
-  crypto_secretbox_easy,
-  crypto_secretbox_open_easy,
-  crypto_box_seal,
-  crypto_box_seal_open
+* Edit API Minter on src/modals/MintModalContext.tsx.
+```
+const apiminter = 'https://xxx.xxx.xxx.xxx';
 
 ```
+* Run rn-tezket via Expo
+```
+nvm use v16.14.0
+npm run install
 
+expo web
 ```
 
-@react-navigation/native
-@react-navigation/native-stack
-@react-navigation/bottom-tabs
+# Credit
 
-expo-linear-gradient
+* Use [NativeBase.io](https://nativebase.io/) for React Native Component.
+* Pay Google play via [Square Web-SDK](https://developer.squareup.com/docs/web-payments/google-pay).
+* Many thanks -- [Taquito](https://github.com/ecadlabs/taquito) & [Beacon SDK](https://www.walletbeacon.io) for [Tezos blockchain](https://tezos.com/).
 
-react-native-safe-area-context
-react-native-screens
 
-react-native-vector-icons
-
-yarn add events stream
-yarn add @airgap/beacon-sdk @taquito/taquito @taquito/beacon-wallet @square/web-sdk
-
-yarn add --dev typescript@~4.3.5 @types/react@~17.0.21 @types/react-native@~0.67.6 @square/web-sdk
-yarn add --dev react-native-modal react-qr-code react-qr-reader
-
-// npm install --save react-square-web-payments-sdk
-// react-qr-image
-
-./ngrok http 19006 // FOR GPAY TEST & CAM
-
-```
