@@ -27,6 +27,7 @@ type Props = {
   onPress: () => any;
   setResultStatus: (Boolean) => any;
   resultStatus: Boolean;
+  ticketPrice: string;
 };
 
 async function tokenize(paymentMethod) {
@@ -144,7 +145,7 @@ const BuyTicketModalContent: React.FC<Props> = (props) => {
                 countryCode: 'TH',
                 currencyCode: 'THB',
                 total: {
-                  amount: '1.00',
+                  amount: props.ticketPrice,
                   label: 'Total',
                 },
             });

@@ -34,6 +34,7 @@ export type TicketInfo = {
   keyword: string;
   description: string;
   timepref: string;
+  ticketprice: string;
 }
 
 export const TicketType = [
@@ -49,7 +50,8 @@ export const TicketList: TicketInfo[] = [
     tag: "1 DAY PASS",
     keyword: "The Silicon Valley of India.",
     description: "Bengaluru (also called Bangalore) is the center of India's high-tech\nindustry. The city is also known for its parks and nightlife.",
-    timepref: "Vaild in 27/06/2022"
+    timepref: "Vaild in 27/06/2022",
+    ticketprice: "2.00" // THB
   },
   // {
   //   ticketype: TicketType[1],
@@ -74,6 +76,7 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
   const [mintStatus, setMintStatus] = useState(false);
 
   const [ticketType, setTicketType] = useState("");
+  const [ticketPrice, setTicketPrice] = useState("");
 
   const toggleBuyTicketModal = () => {
     setBuyTicketModalVisible(!isBuyTicketModalVisible);
@@ -85,8 +88,9 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
     setBuyTicketModalVisible(false);
   };
 
-  const showBuyTicket = async (tickettype) => {
+  const showBuyTicket = async (tickettype,ticketprice) => {
     setTicketType(tickettype);
+    setTicketPrice(ticketprice);
     setBuyTicketModalVisible(true);
   };
 
@@ -99,7 +103,8 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
 
         <Modal testID={'modal'} isVisible={isBuyTicketModalVisible}>
           <BuyTicketModalContent onPress={toggleBuyTicketModal} 
-              resultStatus={payStatus} setResultStatus={setPayStatus}/>
+              resultStatus={payStatus} setResultStatus={setPayStatus}
+              ticketPrice={ticketPrice}/>
         </Modal>
         
         <Modal testID={'modal'} isVisible={isMintModalVisible}>
@@ -164,7 +169,7 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
                   </Text>
                 </HStack>
               <Button ml="auto"
-                onPress={()=>showBuyTicket(ticket.ticketype)}
+                onPress={()=>showBuyTicket(ticket.ticketype, ticket.ticketprice)}
                 >Buy</Button>
               </HStack>
             </Stack>
