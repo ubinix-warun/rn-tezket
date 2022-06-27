@@ -8,6 +8,9 @@ Tezket -- "Tezos Ticket" React Native app -- Buy NFT ticket and use QR to contro
 
 ## [Tezket -- NFT Ticketing System (Prototype V1)](https://www.figma.com/file/3a9etH2QxvpsQBcrfZHgX6/Tezket----NFT-Ticketing-System-(Prototype-V1)?node-id=0%3A1)
 
+### 1. [Demo -- Connect the Wallet and Mint NFT Ticket](https://youtu.be/Wn3L77-08oA) 
+### 2. [Demo -- Use QR to control admittance at the gate](https://youtu.be/JHkj7S3R5XE) (New)
+
 # Build & Run
 
 * Edit Square AppID, LocationID and Api payment on src/modals/BuyTicketModalContext.tsx.
