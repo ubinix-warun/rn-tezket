@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect,useContext} from 'react';
 
 import {
   Box,
@@ -18,17 +18,67 @@ import {
 import {StyleSheet, View} from 'react-native';
 import { MaterialCommunityIcons, Entypo, Ionicons } from '@expo/vector-icons';
 
-import { TicketNft, WalletContext } from '../providers/WalletContext';
+import { NetworkType, DAppClient, PermissionResponseOutput } from "@airgap/beacon-sdk";
+import {WebsocketBuilder} from 'websocket-ts';
+
+import { TicketNft, WalletContext, SignSocketUrl } from '../providers/WalletContext';
+import { ApiMinter } from '../modals/MintModalContent';
 
 type Props = {
   onPress: () => any;
+  onSigning: () => any;
   ticketNft: TicketNft;
-  // userAddress: string;
+  userAddress: string;
+  signState: string;
+  setSignState: (string) => any;
 };
+
 
 const TicketModalContent: React.FC<Props> =  (props) => {
 
   const { colorMode } = useColorMode();
+
+  const { isWalletLinked, isAdmin, userAddress, signPayload } = useContext(WalletContext);
+
+  // Sub Address! <SignButton>
+
+  const ws = new WebsocketBuilder(SignSocketUrl)
+    .onOpen((i, ev) => { 
+      console.log("opened");
+
+      const reqTd = {
+        userAddress: props.userAddress
+      };
+      ws.send(JSON.stringify(reqTd));
+
+    })
+    .onClose((i, ev) => { console.log("closed") })
+    .onError((i, ev) => { console.log("error") })
+    .onMessage(async (i, ev) => { 
+
+        const cmd = ev.data.split(":", 2); 
+        console.log(cmd);
+
+        if(cmd[0] == "SIGN") {
+
+          props.onPress();
+          props.setSignState("");
+          props.onSigning();
+
+          await signPayload("TEST");
+
+          // Sign ...
+          let RespApiUse = await fetch(`${ApiMinter}/use/${props.userAddress}/1234/TEST/${cmd[1]}`)
+            .then((response) => response.json());
+
+          console.log(RespApiUse);
+
+          props.setSignState("OK");
+
+        }
+     })
+    .onRetry((i, ev) => { console.log("retry") })
+    .build();
 
   useEffect(() => {
     console.log(props);

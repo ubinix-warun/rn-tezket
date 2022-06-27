@@ -4,10 +4,9 @@ import React, { createContext, useState, FC } from "react";
 // import { TezosToolkit, MichelCodecPacker } from "@taquito/taquito";
 // import { char2Bytes, bytes2Char } from "@taquito/utils";
 // import { BeaconWallet } from "@taquito/beacon-wallet";
-import { NetworkType, DAppClient, PermissionResponseOutput } from "@airgap/beacon-sdk";
+import { NetworkType, DAppClient, PermissionResponseOutput, SigningType } from "@airgap/beacon-sdk";
 const { TezosToolkit, MichelsonMap } = require('@taquito/taquito');
 import { char2Bytes, bytes2Char } from "@taquito/utils";
-
 
 import { TicketType, TicketList, TicketInfo } from '../screens/Tickets';
 
@@ -43,6 +42,10 @@ const walletOptions = {
     preferredNetwork: networkId
 };
 
+// https://0934b1956eec.ap.ngrok.io
+export const SignSocketUrl = 'wss://0934b1956eec.ap.ngrok.io';
+// export const SignSocketUrl = 'ws://192.168.1.114:8083';
+
 export type TicketNft = {
     tokenId: number;  
     displayNft: string;
@@ -60,7 +63,8 @@ export type WalletContextState = {
     userTicketNfts: TicketNft[],
     getTicketNfts: (address: string) => void,
     linkWallet: () => void;
-    // getReserveList: () => Promise<[]>;
+    // signResult: string;
+    signPayload: (payload: string) => void;
 };
 
 const contextDefaultValues: WalletContextState = {
@@ -72,7 +76,8 @@ const contextDefaultValues: WalletContextState = {
     userTicketNfts: [],
     getTicketNfts: (address: string) => null,
     linkWallet: () => null,
-    // getReserveList: () => null
+    // signResult: '',
+    signPayload: (payload: string) => null,
 };
 
 export const WalletContext = createContext<WalletContextState>(
@@ -87,6 +92,8 @@ const WalletProvider: FC = ({ children }) => {
     const [userAddress, setUserAddress] = useState<string>(contextDefaultValues.userAddress);
     const [userTicketNfts, setUserTicketNfts] = 
         useState<TicketNft[]>(contextDefaultValues.userTicketNfts);
+
+    // const [signResult, setSignResult] = useState<string>(contextDefaultValues.signResult);
 
     const getTicketNfts = async (address: string) => {
         // finds Ticket's NFTs
@@ -154,7 +161,7 @@ const WalletProvider: FC = ({ children }) => {
             const addr = respReqPermit.address;
             setUserAddress(addr);
             setIsWalletLinked(true);
-            setIsAdmin(true);
+            setIsAdmin(addr == 'tz1iRsmK9mKi6rjGYGyRQduFTBjkTM5tzbhs');
             await getTicketNfts(addr);
     
         } catch (err) {
@@ -163,41 +170,22 @@ const WalletProvider: FC = ({ children }) => {
     
     };
 
-    // const getReserveList = async ():Promise<[]> => {
 
-    //     if (!client) {
-    //         setClient(new DAppClient(walletOptions));
-    //     }
-    
-    //     try {
-    //         // const respReqPermit = await client.requestPermissions({
-    //         //     network: {
-    //         //     type: networkId,
-    //         //     rpcUrl
-    //         //     }
-    //         // });
-    //         // setUserAddress(respReqPermit.address);
-        
-    //         // setIsWalletLinked(true);
-    
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
+    const signPayload = async(payload: string) =>  {
 
-    //     const reservseList = [
-    //         {
-    //           name: "The Garden City",
-    //           urlimg: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg",
-    //           tag: "1 DAY PASS",
-    //           keyword: "The Silicon Valley of India.",
-    //           description: "Bengaluru (also called Bangalore) is the center of India's high-tech\nindustry. The city is also known for its parks and nightlife.",
-    //           timepref: "Vaild in 10/06/2022"
-    //         },
-    //       ];
+          console.log(payload);
 
-    //     return reservseList;
-    
-    // };
+          const response = await client.requestSignPayload({
+            signingType: SigningType.RAW,
+            payload: "any string that will be signed",
+          });
+          
+          console.log(`Signature: ${response.signature}`);
+  
+        //   setSignResult(""+response.signature);
+
+    }
+
 
     return (
         <WalletContext.Provider
@@ -210,7 +198,8 @@ const WalletProvider: FC = ({ children }) => {
             userTicketNfts,
             getTicketNfts,
             linkWallet,
-            // getReserveList
+            // signResult,
+            signPayload
         }}
         >
         {children}

@@ -29,6 +29,7 @@ import { ScrollView } from 'react-native';
 import { MaterialCommunityIcons, Entypo, Ionicons } from '@expo/vector-icons';
 
 import Modal from "react-native-modal";
+import SignModalContent from '../modals/SignModalContent';
 
 // const scheduleList = [
 //   {
@@ -50,13 +51,21 @@ export function Reserve({ navigation }: { navigation: BottomTabNavigationProp<an
 
   const { colorMode } = useColorMode();
   
-  const { isWalletLinked, userAddress, userTicketNfts,getTicketNfts } =useContext(WalletContext);
+  const { isWalletLinked, userAddress, userTicketNfts } =useContext(WalletContext);
+  
   const [isTicketModalVisible, setTicketModalVisible] = useState(false);
+  const [isSignModalVisible, setSignModalVisible] = useState(false);
+
+  const [signState, setSignState] = useState("");
 
   const [selectNft, setSelectNft] = useState(undefined);
 
   const toggleTicketModal = () => {
     setTicketModalVisible(!isTicketModalVisible);
+  };
+
+  const toggleSignModal = () => {
+    setSignModalVisible(!isSignModalVisible);
   };
 
   // let selectNft: TicketNft;
@@ -76,7 +85,16 @@ export function Reserve({ navigation }: { navigation: BottomTabNavigationProp<an
         </Heading>
 
         <Modal testID={'modal'} isVisible={isTicketModalVisible}>
-          <TicketModalContent onPress={toggleTicketModal} ticketNft={selectNft} />
+          <TicketModalContent onPress={toggleTicketModal} onSigning={toggleSignModal}
+            signState={signState} setSignState={setSignState} 
+            ticketNft={selectNft} userAddress={userAddress} />
+        </Modal>
+
+
+        <Modal testID={'modal'} isVisible={isSignModalVisible}>
+          <SignModalContent onPress={toggleSignModal} 
+              signState={signState} setSignState={setSignState}
+              />
         </Modal>
 
         <Divider opacity={colorMode == 'dark' ? '0.4' : '1'} />
@@ -111,9 +129,10 @@ export function Reserve({ navigation }: { navigation: BottomTabNavigationProp<an
         </Center>
         {/* <Divider opacity={colorMode == 'dark' ? '0.4' : '1'} /> */}
         <Text fontSize="md" px={2} mx={2} my={3}>Your ticket</Text>
-        {/* <Button ml="auto" onPress={showWallet}>TEST</Button> */}
+        {/* <Button ml="auto" onPress={ () => { setSignState("ERR"); toggleSignModal(); }}>TEST</Button> */}
 
         {userTicketNfts.map((nft) => (
+        
 
         <Pressable onPress={() => showTicket(nft) }>
         <Box alignItems="center" mx={3} my={3}> 

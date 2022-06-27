@@ -21,6 +21,9 @@ import Modal from "react-native-modal";
 import { WalletContext } from '../providers/WalletContext';
 import WalletModalContent from '../modals/WalletModalContent';
 import ScanQrModalContent from '../modals/ScanQrModalContent';
+import MetaQrModalContent from '../modals/MetaQrModalContent';
+
+import {WebsocketBuilder} from 'websocket-ts';
 
 export function AdminSign(props) {
 
@@ -28,8 +31,17 @@ export function AdminSign(props) {
 
   const [isScanQrModalVisible, setScanQrModalVisible] = useState(false);
 
+  const [isSignModalVisible, setSignModalVisible] = useState(false);
+
+  const [metaState, setMetaState] = useState("");
+
+
   const toggleModal = () => {
     setScanQrModalVisible(!isScanQrModalVisible);
+  };
+
+  const toggleSignModal = () => {
+    setSignModalVisible(!isSignModalVisible);
   };
 
   const scanQr = async () => {
@@ -42,8 +54,18 @@ export function AdminSign(props) {
   return (
     <>
     <Modal testID={'modal'} isVisible={isScanQrModalVisible}>
-      <ScanQrModalContent onPress={toggleModal} colorMode={colorMode} userAddress={""+props.userAddress} />
+      <ScanQrModalContent onPress={toggleModal} onSigning={toggleSignModal}
+        colorMode={colorMode} userAddress={""+props.userAddress}
+        metaState={metaState} setMetaState={setMetaState} 
+         />
     </Modal> 
+
+    <Modal testID={'modal'} isVisible={isSignModalVisible}>
+      <MetaQrModalContent onPress={toggleSignModal} 
+          signState={metaState} setSignState={setMetaState}
+          />
+    </Modal>
+
     <HStack alignItems="center" space={6} py={4} px={3} mx={2}>
       <Ionicons
           name="pencil"
@@ -68,7 +90,7 @@ export function Profile({ navigation }: { navigation: BottomTabNavigationProp<an
 
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const { isWalletLinked, isAdmin, userAddress, getTicketNfts, linkWallet } = useContext(WalletContext);
+  const { isWalletLinked, isAdmin, userAddress, linkWallet } = useContext(WalletContext);
 
   const [isWalletModalVisible, setWalletModalVisible] = useState(false);
 
@@ -103,6 +125,7 @@ export function Profile({ navigation }: { navigation: BottomTabNavigationProp<an
             color={colorMode == 'dark' ? 'white' : 'black'}
           />
           <Text>Tezos</Text>
+          {/* <Button ml="auto" onPress={showWallet}>TEST</Button> */}
           {isWalletLinked 
           ?<Button ml="auto" onPress={showWallet}>Show</Button>
           :<Button ml="auto" onPress={linkWallet} colorScheme="secondary">Link</Button>
@@ -110,7 +133,7 @@ export function Profile({ navigation }: { navigation: BottomTabNavigationProp<an
         </HStack>
         {/* <AdminSign/> */}
         {isAdmin
-        ?<AdminSign/>
+        ?<AdminSign userAddress={userAddress}/>
         :<></>
         }
 

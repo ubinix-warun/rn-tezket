@@ -16,13 +16,21 @@ import {
 import {StyleSheet, View} from 'react-native';
 import { MaterialCommunityIcons, Entypo, Ionicons } from '@expo/vector-icons';
 
+import {WebsocketBuilder} from 'websocket-ts';
+
+import { TicketNft, WalletContext, SignSocketUrl } from '../providers/WalletContext';
+import { ApiMinter } from '../modals/MintModalContent';
+
 // import { QrReader } from 'react-qr-reader';
 import QrReader from 'modern-react-qr-reader'
 
 type Props = {
   onPress: () => any;
+  onSigning: () => any;
   userAddress: string;
   colorMode: ColorMode;
+  metaState: string;
+  setMetaState: (string) => any;
 };
 
 const ScanQrModalContent: React.FC<Props> = (props) => {
@@ -33,13 +41,59 @@ const ScanQrModalContent: React.FC<Props> = (props) => {
 
   }, [])
 
-
   // const fetchSqPayment = async () => {
   const handleScan = data => {
     if (data) {
-      console.log(data);
-      setData(data);
-        
+      // console.log(data);
+
+      const meta = data.split(";", 9); 
+      console.log(meta);
+
+      setData(meta[6]);
+
+      // Switch Data Model
+      // >> Sub Address > Request to Sign
+
+      // 1234;tz1ioHBakcGBzT9PFxaiPCoxDJh1Ad7rWkms-4ExdpPd;-;startdate;enddate;746090;tz1ioHBakcGBzT9PFxaiPCoxDJh1Ad7rWkms;;<>;
+
+      // Modal Display Infor.
+
+      const minterAddress = meta[6];
+     
+      const ws = new WebsocketBuilder(SignSocketUrl)
+      .onOpen(async (i, ev) => { 
+        console.log("opened");
+    
+        const reqTd = {
+          userAddress: props.userAddress
+        };
+        ws.send(JSON.stringify(reqTd));
+
+        props.onPress();
+        props.setMetaState("");
+        props.onSigning();
+
+        let RespApiUse = await fetch(`${ApiMinter}/sign/${minterAddress}/${props.userAddress}`)
+          .then((response) => response.json());
+    
+        console.log(RespApiUse);
+    
+      })
+      .onClose((i, ev) => { console.log("closed") })
+      .onError((i, ev) => { console.log("error") })
+      .onMessage(async (i, ev) => { 
+    
+          const cmd = ev.data.split(":", 2); 
+          console.log(cmd);
+          if(cmd[0] == "DONE") {
+    
+            props.setMetaState("OK");
+    
+          }
+       })
+      .onRetry((i, ev) => { console.log("retry") })
+      .build();    
+
     }
   }
   

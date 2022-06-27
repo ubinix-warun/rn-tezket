@@ -21,7 +21,8 @@ import axios from 'axios';
 
 import { WalletContext } from '../providers/WalletContext';
 
-const apiminter = 'https://xxx.xxx.xxx.xxx';
+export const ApiMinter = 'https://782cd8cfdd39.ap.ngrok.io';
+// export const ApiMinter = 'http://192.168.1.114:8082';
 
 type Props = {
   onPress: () => any;
@@ -59,7 +60,7 @@ const MintModalContent: React.FC<Props> = (props) => {
             console.log(req);
 
             const resp = await axios.post(
-                  `${apiminter}/mint`,
+                  `${ApiMinter}/mint`,
                   req
                 );
                 
