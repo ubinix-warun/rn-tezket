@@ -2,11 +2,13 @@
 
 Tezket -- "Tezos Ticket" React Native app -- Buy NFT ticket and use QR to control admittance at the gate., [MIT LICENSE](https://github.com/ubinix-warun/rn-tezket/blob/master/LICENSE)
 
-# Screenshot (Prototype V1)
+# Screenshot (Prototype V1.2)
 
-![v1](https://user-images.githubusercontent.com/3756229/175616596-3a27e8f8-dd78-4431-a2d5-8fcc14f30617.png)
+<!-- ![v1](https://user-images.githubusercontent.com/3756229/175616596-3a27e8f8-dd78-4431-a2d5-8fcc14f30617.png) -->
+![V1.2](https://user-images.githubusercontent.com/3756229/176098059-1e0ff6ee-d698-4069-940d-bc0f0df90bf6.png)
 
-## [Tezket -- NFT Ticketing System (Prototype V1)](https://www.figma.com/file/3a9etH2QxvpsQBcrfZHgX6/Tezket----NFT-Ticketing-System-(Prototype-V1)?node-id=0%3A1)
+
+## [Tezket -- NFT Ticketing System (Prototype V1.2)](https://www.figma.com/file/3a9etH2QxvpsQBcrfZHgX6)
 
 ### 1. [Demo -- Connect the Wallet and Mint NFT Ticket](https://youtu.be/Wn3L77-08oA) 
 ### 2. [Demo -- Use QR to control admittance at the gate](https://youtu.be/JHkj7S3R5XE) (New)
@@ -22,7 +24,7 @@ const locationId = 'XXXXXXXXXXXXXX';
 ```
 * Edit API Minter on src/modals/MintModalContext.tsx. [nft-tezket](https://github.com/ubinix-warun/nft-tezket)
 ```
-const apiminter = 'https://xxx.xxx.xxx.xxx';
+const ApiMinter = 'https://xxx.xxx.xxx.xxx';
 
 ```
 * Edit NFTS_Contract Addr on src/providers/WalletContext.tsx
