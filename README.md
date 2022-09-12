@@ -1,6 +1,10 @@
-# RN-Tezket
+# RN-Tezket v1
 
 Tezket -- "Tezos Ticket" React Native app -- Buy NFT ticket and use QR to control admittance at the gate., [MIT LICENSE](https://github.com/ubinix-warun/rn-tezket/blob/master/LICENSE)
+
+#### Version 2 -- Revision by [TezKet](https://github.com/tezket/)
+* [Pitch Gist!](https://gist.github.com/ubinix-warun/fe48b4e72457b59cb01a732b6abde4c0) -- Intro & Roadmap.
+
 
 # Screenshot (Prototype V1.2)
 
